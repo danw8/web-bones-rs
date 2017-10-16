@@ -1,0 +1,11 @@
+[package]
+name = "web-bones-rs"
+version = "0.1.0"
+authors = ["Daniel Wilkins"]
+
+[dependencies]
+rocket = { version = "0.3.1", features = ["tls"] }
+rocket_codegen = "0.3.1"
+
+#Internal Dependencies
+route = { path = "route" }
