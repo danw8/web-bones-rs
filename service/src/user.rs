@@ -1,4 +1,4 @@
-use r2d2::{ GetTimeout };
+use r2d2::{ Error };
 use rocket::request::{Outcome, FromRequest};
 use rocket::Outcome::{Success, Failure};
 use rocket::http::{Cookies, Cookie, Status};
@@ -18,7 +18,7 @@ pub struct UserService{
 }
 
 impl<'a, 'r> FromRequest<'a, 'r> for UserService {
-	type Error = (GetTimeout);
+	type Error = Error;
 	fn from_request(request: &'a Request<'r>) -> Outcome<Self, Self::Error> {
 		let mut service = match DB_POOL.get() {
 			Ok(db_connection) => UserService {
@@ -103,21 +103,10 @@ impl UserService {
 	// 	Vec::<Permission>::new()
 	// }
 
-	pub fn create_user(&self, new_user: &NewUser) -> Result<User, String> {
-		match diesel::insert(new_user).into(users::table)
-        .execute(self.db.connection()) {
-			Ok(_) => (),
-			Err(e) => {
-				println!("Saving to database failed: {}", e);
-				return Err("Failed to create user.".to_string());
-			},
-		}
-
-        if let Some(u) = self.user_from_name(&new_user.username) {
-			return Ok(u);
-		}
-		println!("Created user does not exist");
-		Err("Failed to create user.".to_string())
+	pub fn create_user(&self, new_user: &NewUser) -> Result<User, diesel::result::Error> {
+		diesel::insert_into(users::table)
+			.values(new_user)
+			.get_result(self.db.connection())
 	}
 
 	fn create_session(&self, mut cookies: Cookies, user: &User) {

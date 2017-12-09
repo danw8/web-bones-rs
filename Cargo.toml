@@ -4,8 +4,8 @@ version = "0.1.0"
 authors = ["Daniel Wilkins"]
 
 [dependencies]
-rocket = { version = "0.3.1", features = ["tls"] }
-rocket_codegen = "0.3.1"
+rocket = { version = "0.3.3", features = ["tls"] }
+rocket_codegen = "0.3.3"
 
 #Internal Dependencies
 route = { path = "route" }

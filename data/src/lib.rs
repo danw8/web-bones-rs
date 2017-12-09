@@ -1,7 +1,7 @@
 #![feature(plugin, custom_derive, custom_attribute)]
 
 #[macro_use] extern crate diesel;
-#[macro_use] extern crate diesel_codegen;
+#[macro_use] extern crate diesel_infer_schema;
 #[macro_use] extern crate serde_derive;
 #[macro_use] extern crate lazy_static;
 extern crate r2d2;
@@ -11,8 +11,8 @@ extern crate rocket;
 
 pub mod model;
 
-use diesel::pg::PgConnection;
-use r2d2::{ Pool, PooledConnection, GetTimeout, Config };
+use diesel::PgConnection;
+use r2d2::{ Pool, PooledConnection};
 use r2d2_diesel::ConnectionManager;
 use rocket::request::{Outcome, FromRequest, Request};
 use rocket::Outcome::{Success, Failure};
@@ -37,7 +37,7 @@ impl DataBase {
 }
 
 impl<'a, 'r> FromRequest<'a, 'r> for DataBase {
-    type Error = GetTimeout;
+    type Error = r2d2::Error;
     fn from_request(_: &'a Request<'r>) -> Outcome<Self, Self::Error> {
         match DB_POOL.get() {
             Ok(db_connection) => Success(DataBase(db_connection)),
@@ -50,10 +50,10 @@ fn create_db_pool() -> Result<Pool<ConnectionManager<PgConnection>>, String> {
     dotenv().ok();
     let database_url = env::var("DATABASE_URL")
         .expect("DATABASE_URL must be set");
-    let pool_config = Config::default();
+    // let pool_config = Config::default();
 	let manager = ConnectionManager::<PgConnection>::new(database_url.clone());
-	match Pool::new(pool_config, manager) {
-		Ok(p) => Ok(p),
-		Err(_) => Err(format!("Error creating connection pool with connection string '{}'", database_url))
-	}
+    match r2d2::Pool::builder().build(manager) {
+        Ok(p) => Ok(p),
+        Err(_) => Err(format!("Error creating connection pool with connection string '{}'", database_url))
+    }
 }
