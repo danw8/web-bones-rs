@@ -40,6 +40,11 @@ note: git needs to be installed.
   * `emsdk activate latest` or `emsdk activate latest --global`
   * `emsdk_env.bat` to activate for the current shell.
 
+## Rust wasm and asmjs targets
+
+1. `rustup target add wasm32-unknown-emscripten`
+2. `rustup target add asmjs-unknown-emscripten`
+
 ## Install Postgres
 
 1. [Download PostgreSQL](https://www.postgresql.org/download/)
@@ -58,3 +63,6 @@ note: git needs to be installed.
 6. `diesel migration run`
 
 ## Create Development TLS key and cert.
+
+1. Skip this unless you need your development environment secure.
+2. to be continued...
