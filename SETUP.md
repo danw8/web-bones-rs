@@ -18,9 +18,12 @@ The goal of this setup file is to give a good way to work with rust and be able 
   * view -> extensions
   * type `rust`
   * choose Rust (rls) and click install then reload.
-3. Install nightly toolchain `rustup install nightly`
-4. Install rust src `rustup component add rust-src`
-5. Install racer `cargo install racer`
+3. Optionally install the rls manually
+  * `rustup component add rls-prview --toolchain nightly`
+4. Install nightly toolchain `rustup install nightly`
+5. Install rust analysis `rustup component add rust-analysis`
+6. Install rust src `rustup component add rust-src`
+7. Install racer `cargo install racer`
 
 ## Optionally install clippy and cargo-update
 1. `cargo install clippy`
