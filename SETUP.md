@@ -52,14 +52,16 @@ note: git needs to be installed.
 
 1. [Download PostgreSQL](https://www.postgresql.org/download/).
 2. Run the installer.
-3. Create a user that can create databases.
+3. Use PgAdmin to create a user that can create databases.
 
 ## Prepare diesel
 
-1. Add enviroment variable PQ_LIB_DIR = 'path to libpq.dll & libpq.lib'.
+1. Add enviroment variable PQ_LIB_DIR = path to libpq.dll & libpq.lib (ex. C:\Program Files\PostgreSQL\9.6\lib).
 2. `cargo install diesel_cli --no-default-features --features postgres`.
-3. `cd data`.
-4. Create a .env file `echo DATABASE_URL=postgres://webbones:password@localhost/web_bones > .env`.
+3. If you haven't clone the rep
+  * `git clone https://github.com/danw8/web-bones-rs`
+3. `cd web-bones-rs/data`.
+4. Create a .env file `echo DATABASE_URL=postgres://user:password@localhost/web_bones > .env`.
   * Replace the information with that of the user you created in postgres.
   * .env doesn't seem to be working anymore so you might have to create the environment variable manually.
 5. `diesel setup`.
@@ -73,6 +75,8 @@ note: git needs to be installed.
 ## Build the server
 
 1. `cargo build` in the root directory.
+  * If build fails you may need to add the DATABASE_URL as an enviroment variable.
+  * Also make sure you are on nightly `rustup default nightly`
 
 ## Build the frontend
 
