@@ -4,9 +4,9 @@ The goal of this setup file is to give a good way to work with rust and be able 
 
 ## Install Rust
 
-1. Install [Visual Studio Code](https://www.visualstudio.com/).
+1. Install [Visual Studio](https://www.visualstudio.com/).
   * This is needed for the msvc compiler.
-  * Make sure to add c++.
+  * Make sure **C++** support is added.
 2. Install [Rustup](https://www.rust-lang.org/en-US/).
 3. Check that it works.
   * `rustc --version` or `cargo --version`.
