@@ -57,15 +57,18 @@ note: git needs to be installed.
 ## Prepare diesel
 
 1. Add enviroment variable PQ_LIB_DIR = path to libpq.dll & libpq.lib (ex. C:\Program Files\PostgreSQL\9.6\lib).
-2. `cargo install diesel_cli --no-default-features --features postgres`.
-3. If you haven't clone the rep
+2. You may need to also add the postgres bin and lib directory to the PATH environment variable.
+  * (ex. C:\Program Files\PostgreSQL\9.6\lib)
+  * (ex. C:\Program Files\PostgreSQL\9.6\bin)
+3. `cargo install diesel_cli --no-default-features --features postgres`.
+4. If you haven't clone the rep
   * `git clone https://github.com/danw8/web-bones-rs`
-3. `cd web-bones-rs/data`.
-4. Create a .env file `echo DATABASE_URL=postgres://user:password@localhost/web_bones > .env`.
+5. `cd web-bones-rs/data`.
+6. Create a .env file `echo DATABASE_URL=postgres://user:password@localhost/web_bones > .env`.
   * Replace the information with that of the user you created in postgres.
   * .env doesn't seem to be working anymore so you might have to create the environment variable manually.
-5. `diesel setup`.
-6. `diesel migration run`.
+7. `diesel setup`.
+8. `diesel migration run`.
 
 ## Create Development TLS key and cert.
 
