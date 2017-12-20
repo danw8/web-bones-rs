@@ -83,26 +83,6 @@ impl UserService {
 		self.current_user
 	}
 
-	// pub fn current_user_has_permission(&self, permission: e_Permission ) -> bool {
-	// 	if self.get_user_permissions().iter().any(|up| up.name == permission.to_string()) {
-	// 		return true;
-	// 	}
-	// 	return false;
-	// }
-
-	// pub fn get_user_permissions(&self) -> Vec<Permission> {
-	// 	if let Some(ref user) = self.current_user {
-	// 		let query = permissions::table.inner_join(user_permissions::table)
-	// 			.filter(user_permissions::user_id.eq(user.id))
-	// 			.load::<(Permission, UserPermission)>(self.db.connection());
-	// 		if query.is_ok() {
-	// 			let permission_list: Vec<Permission> = query.unwrap().iter().map(|p| p.0.clone()).collect();
-	// 			return permission_list;
-	// 		}
-	// 	}
-	// 	Vec::<Permission>::new()
-	// }
-
 	pub fn create_user(&self, new_user: &NewUser) -> Result<User, diesel::result::Error> {
 		diesel::insert_into(users::table)
 			.values(new_user)
