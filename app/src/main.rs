@@ -3,8 +3,13 @@
 #[macro_use] extern crate stdweb;
 extern crate maud;
 extern crate fore;
+#[macro_use] extern crate serde_derive;
+extern crate serde;
+extern crate serde_json;
+extern crate transfer;
 
 use maud::html;
+use maud::PreEscaped;
 use stdweb::web::event::*;
 use stdweb::web::*;
 use stdweb::Value;
@@ -13,24 +18,23 @@ use std::clone::Clone;
 use std::sync::Arc;
 use std::sync::Mutex;
 use std::collections::VecDeque;
+use serde::Serialize;
 
 use fore::*;
 use fore::stdwebex::*;
 
-struct State{
-    number: i32,
-    input: String,
-    input_focus: bool,
+struct State {
+    email: String,
+    password: String,
+    login_attempts: i32,
+    login_status: bool,
 }
 
 #[derive(Clone)]
 enum Msg{
-    Increment,
-    Decrement,
-    Key,
-    InputChanged,
-    GetBob,
-    SendMessage,
+    EmailChanged,
+    PasswordChanged,
+    SubmitLogin,
 }
 
 type TestApp<'a> = ForeApp<'a, State>;
@@ -39,9 +43,10 @@ fn main() {
     stdweb::initialize();
 
     let state = State{
-        number: 0,
-        input: "".to_string(),
-        input_focus: false,
+        email: "".to_string(),
+        password: "".to_string(),
+        login_attempts: 0,
+        login_status: false,
     };
     let state = Arc::new(Mutex::new(state));
     let app = TestApp::new(state, "body");
@@ -55,41 +60,14 @@ fn main() {
 struct TestComponent{}
 impl ForeComponent<State, Msg> for TestComponent{
     fn view(&self, state: Arc<Mutex<State>>, msg_queue: &mut VecDeque<ForeEvent<Msg>>) -> String {
-        let button_up_id = "button-up";
-        let button_down_id = "button-down";
-        let input_id = "input-id";
-        let get_bob_id = "get-bob";
+
         let state = state.lock().unwrap();
-        let message = html!{
-            h1 {
-                (state.number)
-            }
-            button type="button" id=(button_down_id) { 
-                (click::<Msg>(&format!("#{}", button_down_id), Msg::Decrement, msg_queue))
-                "-"
-            }
-            button type="button" id=(button_up_id) {
-                (click::<Msg>(&format!("#{}", button_up_id), Msg::Increment, msg_queue)) 
-                "+"
-            }
-            div {
-                @if state.input_focus {
-                    input type="test" id=(input_id) value=(state.input) autofocus {
-                        (on_keypress::<Msg>(&format!("#{}", input_id), Msg::Key, msg_queue))
-                        (on_change::<Msg>(&format!("#{}", input_id), Msg::InputChanged, msg_queue))
-                    }
-                } @else {
-                    input type="test" id=(input_id) value=(state.input) {
-                        (on_keypress::<Msg>(&format!("#{}", input_id), Msg::Key, msg_queue))
-                        (on_change::<Msg>(&format!("#{}", input_id), Msg::InputChanged, msg_queue))
-                    }
-                }
-            }
-            div {
-                button type="button" id=(get_bob_id) {
-                    (click::<Msg>(&format!("#{}", get_bob_id), Msg::GetBob, msg_queue))
-                    "Get Bob!"
-                }
+        let message = match state.login_status {
+            true => {
+                view_logged_in(&state)
+            },
+            false => {
+                view_login(&state, msg_queue)
             }
         };
         message.into_string()
@@ -99,36 +77,42 @@ impl ForeComponent<State, Msg> for TestComponent{
 fn update(msg: Arc<Mutex<Msg>>, state: Arc<Mutex<State>>, event_data: EventData, node: &Node ) {
     let msg = &*msg.lock().unwrap();
     match msg {
-        &Msg::Increment => {
-            let state = state.clone();
-            let mut state = &mut *state.lock().unwrap();
-            state.number += 1;
-        },
-        &Msg::Decrement => {
-            let state = state.clone();
-            let mut state = &mut *state.lock().unwrap();
-            state.number -= 1;
-        },
-        &Msg::Key => {
-            return;
-        },
-        &Msg::InputChanged => {
+        &Msg::EmailChanged => {
             let state = state.clone();
             let mut state = &mut *state.lock().unwrap();
             match event_data {
                 EventData::Change(_) => {
-                    state.input = get_value(node.clone());
+                    state.email = get_value(node.clone());
                 },
                 _ => {}
             }
             return;
         },
-        &Msg::GetBob => {
-            let bob = http_get("api/bob");
-            alert(&bob);
+        &Msg::PasswordChanged => {
+            let state = state.clone();
+            let mut state = &mut *state.lock().unwrap();
+            match event_data {
+                EventData::Change(_) => {
+                    state.password = get_value(node.clone());
+                },
+                _ => {}
+            }
+            return;
         },
-        &Msg::SendMessage => {
-
+        &Msg::SubmitLogin => {
+            let state = state.clone();
+            let mut state = &mut *state.lock().unwrap();
+            let creds = transfer::Creds {
+                email: state.email.clone(),
+                password: state.password.clone(),
+            };
+            let result = http_post("api/login", &creds);
+            // The returned string has qoutes... go figure.
+            if result == "\"true\"" {
+                state.login_status = true;
+            } else {
+                state.login_attempts += 1;
+            }
         },
         _ => {}
     }
@@ -155,16 +139,58 @@ fn http_get(url: &str) -> String {
 }
 
 /// This is not an async request
-fn http_post(url: &str, data: &str) -> String {
-    let result = js!{
-        var params = @{data};
+fn http_post<I: Serialize>(url: &str, item: &I) -> String {
+    let serialized = serde_json::to_string(item).unwrap();
+
+    let result : Value = js!{
+        var params = @{serialized};
         var xmlHttp = new XMLHttpRequest();
         xmlHttp.open("POST", @{url}, false);
-        xmlHttp.setRequestHeader("Content-Type", "application/json;charset-UTF-8");
+        xmlHttp.setRequestHeader("Content-Type", "application/json");
         xmlHttp.send(params);
         var response = xmlHttp.responseText;
+        console.log(response);
         return response;
     };
-
     return result.try_into().unwrap();
+}
+
+fn view_login(state: &State, msg_queue: &mut VecDeque<ForeEvent<Msg>>) -> PreEscaped<String> {
+    let email_id = "email";
+    let password_id = "password";
+    let submit_id = "submit";
+    html!{
+        h1 {
+            "Login"
+        }
+        @if state.login_attempts > 0 && state.login_status == false {
+            "Login Failed"
+        }
+        div {
+            label for=(email_id) { 
+                "Email"
+            }
+            input type="text" id=(email_id) value=(state.email) {
+                (on_change::<Msg>(&format!("#{}", email_id), Msg::EmailChanged, msg_queue))
+            }
+            label for=(password_id) { 
+                "Password"
+            }
+            input type="password" id=(password_id) value=(state.email) {
+                (on_change::<Msg>(&format!("#{}", password_id), Msg::PasswordChanged, msg_queue))
+            }
+            button type="submit" id=(submit_id) { 
+                (click::<Msg>(&format!("#{}", submit_id), Msg::SubmitLogin, msg_queue))
+                "submit"
+            }
+        }
+    }
+}
+
+fn view_logged_in(state: &State) -> PreEscaped<String> {
+    html!{
+        h1 {
+            "You have been logged in."
+        }
+    }
 }

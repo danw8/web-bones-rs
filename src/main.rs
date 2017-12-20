@@ -12,7 +12,7 @@ fn main() {
             routes![
                 index,
                 files,
-                bob,
+                login,
             ],
         )
         .launch();

@@ -1,0 +1,9 @@
+[package]
+name = "transfer"
+version = "0.1.0"
+authors = ["Daniel Wilkins <daniel.wilkins@centeva.com>"]
+
+[dependencies]
+serde = "1.0"
+serde_derive = "1.0"
+serde_json = "1.0"

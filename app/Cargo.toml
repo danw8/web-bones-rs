@@ -8,5 +8,7 @@ stdweb = "0.2.0"
 maud = "0.17.2"
 serde = "1.0"
 serde_derive = "1.0"
+serde_json = "1.0"
 fore = { git = "https://github.com/danw8/fore-rs" }
+transfer = { path = "../transfer"}
 #fore = { path = "../../fore-rs" }

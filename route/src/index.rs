@@ -14,8 +14,3 @@ fn index() -> Markup {
         }
     }
 }
-
-#[get("/api/bob")]
-fn bob() -> String {
-    "I am Bob.".to_string()
-}
