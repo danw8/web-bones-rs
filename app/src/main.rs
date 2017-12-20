@@ -30,6 +30,7 @@ enum Msg{
     Key,
     InputChanged,
     GetBob,
+    SendMessage,
 }
 
 type TestApp<'a> = ForeApp<'a, State>;
@@ -161,8 +162,9 @@ fn http_post(url: &str, data: &str) -> String {
         xmlHttp.open("POST", @{url}, false);
         xmlHttp.setRequestHeader("Content-Type", "application/json;charset-UTF-8");
         xmlHttp.send(params);
-        return xmlHttp.responseText;
-    }
+        var response = xmlHttp.responseText;
+        return response;
+    };
 
     return result.try_into().unwrap();
 }
