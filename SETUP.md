@@ -31,23 +31,6 @@ The goal of this setup file is to give a good way to work with rust and be able 
 3. `cargo install cargo-update`.
   * This may fail ... Just move on. (broken at time of writing).
 
-## Install Emscripten
-
-note: git needs to be installed.
-
-1. Download [Emscripten](https://kripken.github.io/emscripten-site/docs/getting_started/downloads.html).
-2. Extract the downloaded .zip file to the directory of your choice.
-3. From the terminal run the following commands.
-  * `emsdk update`.
-  * `emsdk install latest`.
-  * `emsdk activate latest` or `emsdk activate latest --global`.
-  * `emsdk_env.bat` to activate for the current shell.
-
-## Rust wasm and asmjs targets
-
-1. `rustup target add wasm32-unknown-emscripten`.
-2. `rustup target add asmjs-unknown-emscripten`.
-
 ## Install Postgres
 
 1. [Download PostgreSQL](https://www.postgresql.org/download/).
@@ -81,12 +64,30 @@ note: git needs to be installed.
 2. `cargo build` in the root directory.
   * If build fails you may need to add the DATABASE_URL as an enviroment variable.
 
+## Install Emscripten
+
+note: git needs to be installed.
+
+1. Download [Emscripten](https://kripken.github.io/emscripten-site/docs/getting_started/downloads.html).
+2. Extract the downloaded .zip file to the directory of your choice.
+3. From the terminal run the following commands.
+  * `emsdk update`.
+  * `emsdk install latest`.
+  * `emsdk activate latest` or `emsdk activate latest --global`.
+  * `emsdk_env.bat` to activate for the current shell.
+
+## Rust wasm and asmjs targets
+
+1. `rustup default nightly-2017-12-11`
+2. `rustup target add wasm32-unknown-emscripten`.
+3. `rustup target add asmjs-unknown-emscripten`.
+
 ## Build the frontend
 
 1. `cd app`
 2. `rustup default nightly-2017-12-11` if you are on a different toolchain.
   * Unfortunately the frontend won't build with the current nightly.
-3. `cargo build --target=wasm32-unknown-emscripten` in the frontend directory.
+3. `cargo build --target=wasm32-unknown-emscripten` in the app directory.
 4. move the resulting app.js and app.wasm files from app/target/wasm32-unknown-emscripten/debug/ to assets/
 
 ## Run the application
