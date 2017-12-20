@@ -1,0 +1,12 @@
+[package]
+name = "app"
+version = "0.1.0"
+authors = ["Daniel Wilkins <danielwilkins8@gmail.com>"]
+
+[dependencies]
+stdweb = "0.2.0"
+maud = "0.17.2"
+serde = "1.0"
+serde_derive = "1.0"
+fore = { git = "https://github.com/danw8/fore-rs" }
+#fore = { path = "../../fore-rs" }

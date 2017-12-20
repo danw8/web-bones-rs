@@ -5,7 +5,17 @@ use service::*;
 fn index() -> Markup {
     html!{
         body{
-            "Loading..."
+            div id="app" {
+                "Loading..."
+            }
+            script src="/app.js" {
+
+            }
         }
     }
+}
+
+#[get("/api/bob")]
+fn bob() -> String {
+    "I am Bob.".to_string()
 }
