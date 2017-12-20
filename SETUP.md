@@ -19,7 +19,7 @@ The goal of this setup file is to give a good way to work with rust and be able 
   * type `rust`.
   * choose Rust (rls) and click install then reload.
 3. Optionally install the rls manually.
-  * `rustup component add rls-prview --toolchain nightly`.
+  * `rustup component add rls-preview --toolchain nightly`.
 4. Install nightly toolchain `rustup install nightly`.
 5. Install rust analysis `rustup component add rust-analysis`.
 6. Install rust src `rustup component add rust-src`.
