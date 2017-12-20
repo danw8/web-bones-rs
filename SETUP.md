@@ -77,15 +77,19 @@ note: git needs to be installed.
 
 ## Build the server
 
-1. `cargo build` in the root directory.
+1. `rustup default nightly` if you are on a different toolchain.
+2. `cargo build` in the root directory.
   * If build fails you may need to add the DATABASE_URL as an enviroment variable.
-  * Also make sure you are on nightly `rustup default nightly`
 
 ## Build the frontend
 
-1. `cargo build --target=wasm32-unknown-emscripten` in the frontend directory.
-2. move the resulting .js and .wasm files to the assets folder.
+1. `cd app`
+2. `rustup default nightly-2017-12-11` if you are on a different toolchain.
+  * Unfortunately the frontend won't build with the current nightly.
+3. `cargo build --target=wasm32-unknown-emscripten` in the frontend directory.
+4. move the resulting app.js and app.wasm files from app/target/wasm32-unknown-emscripten/debug/ to assets/
 
 ## Run the application
 
-1. `cargo run` from the root directory.
+1. `rustup default nightly` if you are on a different toolchain.
+2. `cargo run` from the root directory.
