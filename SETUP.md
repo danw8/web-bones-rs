@@ -64,7 +64,7 @@ The goal of this setup file is to give a good way to work with rust and be able 
 2. `cargo build` in the root directory.
   * If build fails you may need to add the DATABASE_URL as an enviroment variable.
 
-## Install Emscripten
+## Install Emscripten (Optional: Use the rust target)
 
 note: git needs to be installed.
 
@@ -75,15 +75,24 @@ note: git needs to be installed.
   * `emsdk install latest`.
   * `emsdk activate latest` or `emsdk activate latest --global`.
   * `emsdk_env.bat` to activate for the current shell.
+4. `rustup default nightly-2017-12-11`
+5. `rustup target add wasm32-unknown-emscripten`.
+6. `rustup target add asmjs-unknown-emscripten`.
 
-## Rust wasm and asmjs targets
+## Native Rust wasm target
 
-1. `rustup default nightly-2017-12-11`
-2. `rustup target add wasm32-unknown-emscripten`.
-3. `rustup target add asmjs-unknown-emscripten`.
+1. `rustup target add wasm32-unknown-unknown`
+2. install cargo web `cargo install -f cargo-web`
 
 ## Build the frontend
 
+#### Rust native target
+
+1. `cp app`
+2. `cargo web build --target-webasm`
+3. move the resulting app.js and app.wasm files from app/target/wasm32-unknown-emscripten/debug/ to assets/
+
+#### Emcsripten (Use the native target)
 1. `cd app`
 2. `rustup default nightly-2017-12-11` if you are on a different toolchain.
   * Unfortunately the frontend won't build with the current nightly.
