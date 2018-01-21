@@ -6,8 +6,8 @@ authors = ["Daniel Wilkins"]
 [dependencies]
 diesel = { version = "1.0.0-beta1", features = ["postgres"] }
 diesel_infer_schema = { version ="1.0.0-beta1", features = ["postgres"] }
-rocket = { version = "0.3.3"}
-rocket_codegen = "0.3.3"
+rocket = { version = "0.3.6"}
+rocket_codegen = "0.3.6"
 r2d2 = "0.8"
 r2d2-diesel = "1.0.0-beta1"
 serde = "1.0"

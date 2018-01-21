@@ -11,4 +11,4 @@ serde_derive = "1.0"
 serde_json = "1.0"
 fore = { git = "https://github.com/danw8/fore-rs" }
 transfer = { path = "../transfer"}
-#fore = { path = "../../fore-rs" }
+#fore = { path = "../../fore-rs" }th = "../../fore-rs" }
