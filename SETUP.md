@@ -103,3 +103,8 @@ note: git needs to be installed.
 
 1. `rustup default nightly` if you are on a different toolchain.
 2. `cargo run` from the root directory.
+
+
+## Documentation Issues
+
+Please feel free to open issue about this repository.

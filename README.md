@@ -10,12 +10,10 @@ Some of the libraries this repository uses are:
 
 1. [Rocket](https://rocket.rs/)
 2. [Deisel](diesel.rs)
-3. [Maud](https://maud.lambda.xyz/)
-4. [STDWEB](https://github.com/koute/stdweb)
-5. and more to come...
+3. [Yew](https://github.com/DenisKolodin/yew)
 
 ## Server Side
-This server is built on top of the Rocket web framework with Diesel ORM connected to Postgres as the data layer. Muad is used as a type safe templating engine.
+This server is built on top of the Rocket web framework with Diesel ORM connected to Postgres as the data layer. Maud is used as a type safe templating engine.
 
 ## Client Side (WIP)
-This client is built on top of the stdweb library and uses maud for templating when it can.
+This client is built with Yew a rust to wasm front end library.
