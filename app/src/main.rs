@@ -20,7 +20,7 @@ struct Context {
 }
 
 struct Model {
-    email: String,
+    username: String,
     password: String,
     login_attempts: i32,
     login_status: bool,
@@ -28,10 +28,10 @@ struct Model {
 }
 
 enum Msg{
-    UpdateEmail(String),
+    UpdateUsername(String),
     UpdatePassword(String),
     SubmitLogin,
-    LoginReady(Result<String, ()>),
+    LoginReady(Result<bool, ()>),
 }
 
 impl Component<Context> for Model {
@@ -40,7 +40,7 @@ impl Component<Context> for Model {
 
     fn create(_: Self::Properties, _: &mut Env<Context, Self>) -> Self {
         Model {
-            email: "".to_string(),
+            username: "".to_string(),
             password: "".to_string(),
             login_attempts: 0,
             login_status: false,
@@ -50,15 +50,15 @@ impl Component<Context> for Model {
 
     fn update(&mut self, msg: Self::Msg, context: &mut Env<Context, Self>) -> ShouldRender{
         match msg {
-            Msg::UpdateEmail(val) => {
-                self.email = val;
+            Msg::UpdateUsername(val) => {
+                self.username = val;
             },
             Msg::UpdatePassword(val) => {
                 self.password = val;
             },
             Msg::SubmitLogin => {          
                 let creds = Creds { 
-                    email: self.email.to_string(),
+                    username: self.username.to_string(),
                     password: self.password.to_string(),
                 };
                 let login_request = Request::post("/api/login")
@@ -66,7 +66,7 @@ impl Component<Context> for Model {
                     .body(serde_json::to_string(&creds).unwrap()).unwrap();
                 
                 let callback = context.send_back(Msg::LoginReady);
-                let handler = move |response: Response<Json<Result<String, ()>>>| {
+                let handler = move |response: Response<Json<Result<bool, ()>>>| {
                     let (_, Json(data)) = response.into_parts();
                     callback.emit(data)
                 };
@@ -82,7 +82,7 @@ impl Component<Context> for Model {
                 let log = format!("Login Status: {}", status);
                 context.console.log(&log);
                 self.login_attempts += 1;
-                self.login_status = status == "true".to_string();
+                self.login_status = status;
             },
             Msg::LoginReady(Err(_)) => {
                 context.console.log("Improper response from log in.");
@@ -110,9 +110,9 @@ impl Renderable<Context, Model> for Model {
             <div>
                 <label>{ "Email" }</label>
                 <input type="text", 
-                    id="email",
-                    value=&self.email,
-                    oninput=|e: InputData| Msg::UpdateEmail(e.value),>
+                    id="username",
+                    value=&self.username,
+                    oninput=|e: InputData| Msg::UpdateUsername(e.value),>
                 </input>
                 <label>{ "Password" }</label>
                 <input type="password", 

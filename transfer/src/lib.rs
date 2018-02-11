@@ -4,6 +4,6 @@ extern crate serde_json;
 
 #[derive(Serialize, Deserialize)]
 pub struct Creds {
-    pub email: String,
+    pub username: String,
     pub password: String,
 }
