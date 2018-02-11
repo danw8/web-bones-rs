@@ -5,7 +5,7 @@ authors = ["Daniel Wilkins <danielwilkins8@gmail.com>"]
 
 [dependencies]
 rocket = { version = "0.3.6", features = ["tls"] }
-diesel = { version = "1.0.0-beta1", features = ["postgres"] }
+diesel = { version = "1.0", features = ["postgres"] }
 r2d2 = "0.8"
 bcrypt = "0.1"
 
