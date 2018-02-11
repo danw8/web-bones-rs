@@ -2,6 +2,7 @@
 name = "web-bones-rs"
 version = "0.1.0"
 authors = ["Daniel Wilkins"]
+license = "MIT OR Apache-2.0"
 
 [dependencies]
 rocket = { version = "0.3.6", features = ["tls"] }
