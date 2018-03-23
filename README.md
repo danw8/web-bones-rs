@@ -1,11 +1,11 @@
 # web-bones-rs
-This is a repository to get you stared with web development in pure rust.
+This is a repository to get you started with web development in pure rust.
 
 ## Setup
 Follow the Setup.md file. This document helps you setup a environment and tools to get you started with rust development.
 
 ## Purpose
-This repository is meant to be helpful in figuring out how differnt libraries in the rust ecosystem that can be used to build web apps in rust.
+This repository is meant to be helpful in figuring out how different libraries in the rust ecosystem that can be used to build web applications in rust.
 Some of the libraries this repository uses are:
 
 1. [Rocket](https://rocket.rs/)
