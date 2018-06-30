@@ -2,7 +2,7 @@
 This is a repository to get you started with web development in pure rust.
 
 ## Setup
-Follow the Setup.md file. This document helps you setup a environment and tools to get you started with rust development.
+Follow the Setup.md file. This document helps you setup a environment and tools to get you started with rust development. This is geared toward windows developers. Linux users should have a easier time setting things up, but could still follow the parts that may be relevant.
 
 ## Purpose
 This repository is meant to be helpful in figuring out how different libraries in the rust ecosystem that can be used to build web applications in rust.
