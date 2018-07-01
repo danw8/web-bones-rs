@@ -90,7 +90,7 @@ note: git needs to be installed.
 #### Rust native target
 
 1. `cp app`
-2. `cargo web build --target-webasm`
+2. `cargo web build --target --wasm32-unknown-unknown`
 3. move the resulting app.js and app.wasm files from app/target/wasm32-unknown-emscripten/debug/ to assets/
 
 #### Emcsripten (Use the native target)
