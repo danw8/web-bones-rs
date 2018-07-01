@@ -7,6 +7,7 @@ The goal of this setup file is to give a good way to work with rust and be able 
 1. Install [Visual Studio](https://www.visualstudio.com/).
   * This is needed for the msvc compiler.
   * Make sure **C++** support is added.
+  * A library used by Rocket.rs requires VS2015 v3 or later but does not support 2017 (yet?)
 2. Install [Rustup](https://www.rust-lang.org/en-US/).
 3. Check that it works.
   * `rustc --version` or `cargo --version`.
@@ -89,7 +90,7 @@ note: git needs to be installed.
 #### Rust native target
 
 1. `cp app`
-2. `cargo web build --target-webasm`
+2. `cargo web build --target wasm32-unknown-unknown`
 3. move the resulting app.js and app.wasm files from app/target/wasm32-unknown-emscripten/debug/ to assets/
 
 #### Emcsripten (Use the native target)
