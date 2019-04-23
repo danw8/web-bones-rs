@@ -3,3 +3,4 @@
 **/*.rs.bk
 /.env
 /data/.env
+/assets/*
