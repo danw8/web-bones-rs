@@ -1,18 +1,20 @@
 #![feature(plugin)]
-#![feature(const_atomic_bool_new)]
-#![plugin(rocket_codegen)]
+#![feature(proc_macro_hygiene, decl_macro)]
+#[macro_use]
 extern crate rocket;
+extern crate rocket_codegen;
 extern crate route;
-use route::*;
+
+
 
 fn main() {
     rocket::ignite()
         .mount(
             "/",
             routes![
-                index,
-                files,
-                login,
+                route::index,
+                route::files,
+                route::login,
             ],
         )
         .launch();

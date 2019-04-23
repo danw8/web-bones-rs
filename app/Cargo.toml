@@ -7,7 +7,7 @@ authors = ["Daniel Wilkins <danielwilkins8@gmail.com>"]
 serde = "1.0"
 serde_derive = "1.0"
 serde_json = "1.0"
-yew = {git = "https://github.com/DenisKolodin/yew"}
+yew = "0.6"
 transfer = { path = "../transfer"}
 http = "0.1"
 failure = "0.1"

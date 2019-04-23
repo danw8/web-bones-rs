@@ -1,7 +1,6 @@
-#![feature(plugin, custom_derive, custom_attribute)]
+#![feature(plugin, custom_attribute)]
 
 #[macro_use] extern crate diesel;
-#[macro_use] extern crate diesel_infer_schema;
 #[macro_use] extern crate serde_derive;
 #[macro_use] extern crate lazy_static;
 extern crate r2d2;
@@ -10,6 +9,7 @@ extern crate dotenv;
 extern crate rocket;
 
 pub mod model;
+pub mod schema;
 
 use diesel::PgConnection;
 use r2d2::{ Pool, PooledConnection};
@@ -20,9 +20,7 @@ use rocket::http::Status;
 use dotenv::dotenv;
 use std::env;
 
-pub mod schema{
-    infer_schema!("dotenv:DATABASE_URL");
-}
+
 
 lazy_static! {
 	pub static ref DB_POOL: Pool<ConnectionManager<PgConnection>> = create_db_pool().unwrap();

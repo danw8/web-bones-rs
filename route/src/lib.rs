@@ -1,13 +1,12 @@
-#![feature(plugin, custom_derive)]
-#![feature(proc_macro)]
-#![feature(proc_macro_non_items)]
-#![plugin(rocket_codegen)]
+#![feature(plugin)]
+#![feature(proc_macro_hygiene, decl_macro)]
 extern crate bcrypt;
 extern crate data;
 extern crate guard;
 extern crate maud;
 extern crate rocket;
 extern crate rocket_contrib;
+extern crate rocket_codegen;
 extern crate serde;
 extern crate serde_derive;
 extern crate serde_json;

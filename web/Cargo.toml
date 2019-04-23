@@ -1,0 +1,12 @@
+[package]
+name = "web"
+version = "0.1.0"
+authors = ["Daniel Wilkins"]
+license = "MIT OR Apache-2.0"
+
+[dependencies]
+rocket = { version = "0.4", features = ["tls"] }
+rocket_codegen = "0.4"
+
+#Internal Dependencies
+route = { path = "../route" }

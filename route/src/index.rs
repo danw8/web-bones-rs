@@ -1,8 +1,9 @@
 use maud::{html, Markup};
+use rocket::get;
 
 #[get("/")]
-fn index() -> Markup {
-    html!{
+pub fn index() -> Markup {
+    let html = html!{
         body{
             div id="app" {
                 "Loading..."
@@ -11,5 +12,6 @@ fn index() -> Markup {
 
             }
         }
-    }
+    };
+    html
 }
