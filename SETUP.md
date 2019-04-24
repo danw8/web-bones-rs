@@ -76,7 +76,7 @@ note: git needs to be installed.
   * `emsdk install latest`.
   * `emsdk activate latest` or `emsdk activate latest --global`.
   * `emsdk_env.bat` to activate for the current shell.
-4. `rustup default nightly-2017-12-11`
+4. `rustup default nightly`
 5. `rustup target add wasm32-unknown-emscripten`.
 6. `rustup target add asmjs-unknown-emscripten`.
 
@@ -96,7 +96,7 @@ note: git needs to be installed.
 
 #### Emcsripten (Use the native target)
 1. `cd app`
-2. `rustup default nightly-2017-12-11` if you are on a different toolchain.
+2. `rustup default nightly` if you are on a different toolchain.
   * Unfortunately the frontend won't build with the current nightly.
 3. `cargo build --target=wasm32-unknown-emscripten` in the app directory.
 4. move the resulting app.js and app.wasm files from app/target/wasm32-unknown-emscripten/debug/ to assets/
@@ -104,7 +104,7 @@ note: git needs to be installed.
 ## Run the application
 
 1. `rustup default nightly` if you are on a different toolchain.
-2. `cargo run` from the root directory.
+2. `cargo run -p web` from the root directory.
 
 
 ## Documentation Issues
