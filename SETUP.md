@@ -37,6 +37,7 @@ The goal of this setup file is to give a good way to work with rust and be able 
 1. [Download PostgreSQL](https://www.postgresql.org/download/).
 2. Run the installer.
 3. Use PgAdmin to create a user that can create databases.
+4. You need to add `libpq.dll` to your PATH it is located in the bin directory of the postgres install. 
 
 ## Prepare diesel
 
