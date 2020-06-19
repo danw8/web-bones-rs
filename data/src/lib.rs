@@ -1,10 +1,9 @@
-#![feature(plugin, custom_attribute)]
+#![feature(plugin)]
 
 #[macro_use] extern crate diesel;
 #[macro_use] extern crate serde_derive;
 #[macro_use] extern crate lazy_static;
 extern crate r2d2;
-extern crate r2d2_diesel;
 extern crate dotenv;
 extern crate rocket;
 
@@ -13,7 +12,7 @@ pub mod schema;
 
 use diesel::PgConnection;
 use r2d2::{ Pool, PooledConnection};
-use r2d2_diesel::ConnectionManager;
+use diesel::r2d2::ConnectionManager;
 use rocket::request::{Outcome, FromRequest, Request};
 use rocket::Outcome::{Success, Failure};
 use rocket::http::Status;

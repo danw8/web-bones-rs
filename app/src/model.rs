@@ -1,37 +1,35 @@
 use http::{Request, Response};
-use serde_json;
 use yew::format::Json;
 use yew::prelude::*;
 use yew::services::console::ConsoleService;
-use yew::services::fetch::{FetchService, FetchTask};
+use yew::services::fetch::FetchService;
 
-use failure::Error;
+use anyhow::Error;
 use transfer::Creds;
-
-pub struct Context {}
 
 pub struct Model {
     creds: Creds,
     login_attempts: i32,
     login_status: bool,
-    task: Option<FetchTask>,
-    login_callback: Callback<Result<bool, Error>>,
+    //task: Option<FetchTask>,
     console: ConsoleService,
     web: FetchService,
+    link: ComponentLink<Self>,
 }
 
 pub enum Msg {
     UpdateUsername(String),
     UpdatePassword(String),
     SubmitLogin,
-    LoginReady(Result<bool, Error>),
+    LoginReady(bool),
+    LoginFailed,
 }
 
 impl Component for Model {
     type Message = Msg;
     type Properties = ();
 
-    fn create(_: Self::Properties, mut link: ComponentLink<Self>) -> Self {
+    fn create(_: Self::Properties, link: ComponentLink<Self>) -> Self {
         let creds = Creds {
             username: "".to_string(),
             password: "".to_string(),
@@ -40,8 +38,8 @@ impl Component for Model {
             creds: creds,
             login_attempts: 0,
             login_status: false,
-            task: None,
-            login_callback: link.send_back(Msg::LoginReady),
+            //task: None,
+            link: link,
             web: FetchService::new(),
             console: ConsoleService::new(),
         }
@@ -61,32 +59,37 @@ impl Component for Model {
                     .body(Json(&self.creds)) //serde_json::to_string(&self.creds).unwrap())
                     .unwrap();
 
-                let callback = self.login_callback.clone();
-                let handler = move |response: Response<Json<Result<bool, Error>>>| {
-                    let (_, Json(data)) = response.into_parts();
-                    callback.emit(data)
-                };
+                let callback = self.link.callback(|response: Response<Json<Result<bool, Error>>>| {
+					if let (meta, Json(Ok(body))) = response.into_parts() {
+						if meta.status.is_success() {
+							return Msg::LoginReady(body);
+						}
+					}
+					Msg::LoginFailed
+				});
 
-                let task = self.web.fetch(login_request, handler.into());
-                self.task = Some(task);
+                let _task = self.web.fetch(login_request,callback);
             }
-            Msg::LoginReady(Ok(status)) => {
+            Msg::LoginReady(status) => {
                 let log = format!("Login Status: {}", status);
                 self.console.log(&log);
                 self.login_attempts += 1;
                 self.login_status = status;
             }
-            Msg::LoginReady(Err(_)) => {
+            Msg::LoginFailed => {
                 self.console.log("Improper response from log in.");
                 self.login_attempts += 1;
             }
         }
         true
     }
-}
 
-impl Renderable<Model> for Model {
-    fn view(&self) -> Html<Self> {
+    fn change(&mut self, _: <Self as yew::Component>::Properties) -> bool { todo!() }
+
+    fn view(&self) -> Html {
+    	let username_updated = self.link.callback(|e: InputData| Msg::UpdateUsername(e.value));
+    	let password_updated = self.link.callback(|e: InputData| Msg::UpdatePassword(e.value));
+    	let submit_clicked = self.link.callback(|_: MouseEvent| Msg::SubmitLogin);
         if self.login_status == true {
             html! {
                 <div>
@@ -95,38 +98,40 @@ impl Renderable<Model> for Model {
             }
         } else {
             html! {
-                <div>
-                    <h1>{ "Login" }</h1>
-                </div>
-                <div>{
-                    if self.login_attempts > 0 && self.login_status == false {
-                        "Login Failed"
-                    } else {
-                        ""
-                    }
-                }</div>
-                <div>
-                    <label>{ "Email" }</label>
-                    <input type="text",
-                        id="username",
-                        value=&self.creds.username,
-                        oninput=|e| Msg::UpdateUsername(e.value),>
-                    </input>
-                    <label>{ "Password" }</label>
-                    <input type="password",
-                        id="password",
-                        value=&self.creds.password,
-                        oninput=|e| Msg::UpdatePassword(e.value),>
-                    </input>
-                    <button type="submit",
-                        id="submit",
-                        onclick=|_| Msg::SubmitLogin,>
-                        {"Login"}
-                    </button>
-                </div>
-                <div>
-                    {"Attempts: "}{ &self.login_attempts }
-                </div>
+            	<div>
+		            <div>
+		                <h1>{ "Login" }</h1>
+		            </div>
+		            <div>{
+		                if self.login_attempts > 0 && self.login_status == false {
+		                    "Login Failed"
+		                } else {
+		                    ""
+		                }
+		            }</div>
+		            <div>
+		                <label>{ "Email" }</label>
+		                <input type="text",
+		                    id="username",
+		                    value=&self.creds.username,
+		                    oninput=username_updated>
+		                </input>
+		                <label>{ "Password" }</label>
+		                <input type="password",
+		                    id="password",
+		                    value=&self.creds.password,
+		                    oninput=password_updated>
+		                </input>
+		                <button type="submit",
+		                    id="submit",
+		                    onclick=submit_clicked>
+		                    {"Login"}
+		                </button>
+		            </div>
+		            <div>
+		                {"Attempts: "}{ &self.login_attempts }
+		            </div>
+		        </div>
             }
         }
     }

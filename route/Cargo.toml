@@ -6,9 +6,9 @@ authors = ["Daniel Wilkins <danielwilkins8@gmail.com>"]
 [dependencies]
 maud = { version = "0.20", features = ["rocket"] }
 maud_macros = { version = "0.20"}
-rocket = { version = "0.4", features = ["tls"] }
-rocket_codegen = "0.4"
-rocket_contrib = "0.4"
+rocket = { version = "0.4.5", features = ["tls"] }
+rocket_codegen = "0.4.5"
+rocket_contrib = "0.4.5"
 bcrypt = "0.4"
 serde = "1.0"
 serde_derive = "1.0"

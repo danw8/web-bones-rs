@@ -5,8 +5,8 @@ authors = ["Daniel Wilkins"]
 license = "MIT OR Apache-2.0"
 
 [dependencies]
-rocket = { version = "0.4", features = ["tls"] }
-rocket_codegen = "0.4"
+rocket = { version = "0.4.5", features = ["tls"] }
+rocket_codegen = "0.4.5"
 
 #Internal Dependencies
 route = { path = "../route" }

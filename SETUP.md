@@ -84,23 +84,15 @@ note: git needs to be installed.
 ## Native Rust wasm target
 
 1. `rustup target add wasm32-unknown-unknown`
-2. install cargo web `cargo install -f cargo-web`
+2. install cargo web `cargo install -f wasm-pack`
 
 ## Build the frontend
 
 #### Rust native target
 
 1. `cp app`
-2. compile the wasm code in release mode this fixes some wasm errors.
-3. `cargo web build --release --target wasm32-unknown-unknown`
-4. move the resulting app.js and app.wasm files from app/target/wasm32-unknown-unknown/debug/ to assets/
+2. `wasm-pack build --target web --out-name app --out-dir ../assets/`
 
-#### Emcsripten (Use the native target)
-1. `cd app`
-2. `rustup default nightly` if you are on a different toolchain.
-  * Unfortunately the frontend won't build with the current nightly.
-3. `cargo build --target=wasm32-unknown-emscripten` in the app directory.
-4. move the resulting app.js and app.wasm files from app/target/wasm32-unknown-emscripten/debug/ to assets/
 
 ## Run the application
 
